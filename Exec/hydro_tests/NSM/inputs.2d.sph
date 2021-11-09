@@ -1,21 +1,21 @@
 # ------------------  INPUTS TO MAIN PROGRAM  -------------------
 max_step = 5000
-stop_time = 10
+stop_time = 1e9
 
 # PROBLEM SIZE & GEOMETRY
 geometry.is_periodic = 0    0
-geometry.coord_sys   = 0     
+geometry.coord_sys   = 1     
 
 geometry.prob_lo     = 0    0
 geometry.prob_hi     = 5.e18  5.e18
-amr.n_cell           = 32   32
+amr.n_cell           = 256   256
 
 # >>>>>>>>>>>>>  BC FLAGS <<<<<<<<<<<<<<<<
 # 0 = Interior           3 = Symmetry
 # 1 = Inflow             4 = SlipWall
 # 2 = Outflow            5 = NoSlipWall
 # >>>>>>>>>>>>>  BC FLAGS <<<<<<<<<<<<<<<<
-castro.lo_bc       =  2   2
+castro.lo_bc       =  3   3
 castro.hi_bc       =  2   2
 
 # WHICH PHYSICS
@@ -23,16 +23,12 @@ castro.do_hydro = 1
 castro.do_react = 0
 castro.ppm_type = 1
 
-castro.ppm_temp_fix = 0
-
-castro.use_flattening = 1
-
-castro.riemann_solver = 1
-
 # TIME STEP CONTROL
 castro.cfl            = 0.5     # cfl number for hyperbolic system
 castro.init_shrink    = 0.01    # scale back initial timestep
 castro.change_max     = 1.1     # maximum increase in dt over successive steps
+
+castro.max_subcycles = 64 # CHANGED UP FROM 10 !
 
 # DIAGNOSTICS & VERBOSITY
 castro.sum_interval   = 1       # timesteps between computing mass
@@ -41,11 +37,11 @@ amr.v                 = 1       # verbosity in Amr.cpp
 #amr.grid_log         = grdlog  # name of grid logging file
 
 # REFINEMENT / REGRIDDING
-amr.max_level       = 4       # maximum level number allowed
+amr.max_level       = 3       # maximum level number allowed
 amr.ref_ratio       = 2 2 2 2 # refinement ratio
 amr.regrid_int      = 2       # how often to regrid
 amr.blocking_factor = 8       # block factor in grid generation
-amr.max_grid_size   = 32
+amr.max_grid_size   = 256
 
 amr.refinement_indicators = denerr dengrad presserr pressgrad
 
@@ -67,11 +63,11 @@ amr.refine.pressgrad.field_name = pressure
 
 # CHECKPOINT FILES
 amr.check_file      = NSM_2d_chk     # root name of checkpoint file
-amr.check_int       = 1000     # number of timesteps between checkpoints
+amr.check_int       = 200     # number of timesteps between checkpoints
 
 # PLOTFILES
 amr.plot_file       = NSM_2d_plt
-amr.plot_int        = 1000
+amr.plot_int        = 100
 amr.derive_plot_vars=ALL
 
 # PROBLEM PARAMETERS
@@ -80,7 +76,7 @@ problem.p_ISM = 1.e-14
 problem.exp_energy = 50.0
 problem.dens_ISM = 2.e-24
 problem.nsub = 10
-problem.t_init = 1.e8
+problem.t_init = 7.e7
 problem.temp_ISM = 1.e2
 
 # EOS
