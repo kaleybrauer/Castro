@@ -1,0 +1,20 @@
+# name               data type             default                  in namelist?           size
+
+
+p_ISM                  real                 1.e-5_rt                     y
+
+dens_ISM               real                 1.e0_rt                      y
+
+exp_energy             real                 50.e0_rt                     y
+
+temp_ISM               real                 1.e2_rt                      y
+
+e_ISM                  real                 0.0_rt
+
+t_init                 real                 0.05e0_rt                    y
+
+nsub                   integer              4                            y
+
+e_exp                  real                 0.0_rt
+
+M_ej                   real                 0.01_rt                      y
