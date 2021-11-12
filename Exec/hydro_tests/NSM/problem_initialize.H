@@ -29,10 +29,7 @@ void problem_initialize ()
     xn_zone[0] = 1.0_rt;
 
     eos_t eos_state;
-
-    // Real erg_per_Msol_cgs = 5.03e-34;
-    // Real v_max = sqrt( pow (10.0, problem::exp_energy) * erg_per_Msol_cgs / (3.0 * problem::M_ej / 10.0));
-    // Real r_init = v_max * problem::t_init;
+    // eos_state.gam1 = 5./3.;
 
     // override the pressure with the temperature
     if (problem::temp_ISM > 0.0_rt) {
@@ -51,7 +48,6 @@ void problem_initialize ()
 
     // Calculate ISM state data
 
-    eos_state.gam1 = 5./3.;
     eos_state.rho = problem::dens_ISM;
     eos_state.p   = problem::p_ISM;
     eos_state.T   = 1.e9_rt; // Initial guess for iterations
@@ -64,58 +60,6 @@ void problem_initialize ()
     problem::e_ISM = eos_state.e;
     problem::temp_ISM = eos_state.T;
 
-//     // set explosion pressure -- we will convert the point-explosion energy into
-//     // a corresponding pressure distributed throughout the perturbed volume
-
-//     Real vctr = 0.0;
-
-//     if (coord_type == 0) {
-
-// #if AMREX_SPACEDIM == 1
-
-//         amrex::Abort("Sedov problem unsupported in 1D Cartesian geometry.");
-
-// #elif AMREX_SPACEDIM == 2
-
-//         // Cylindrical problem in Cartesian coordinates
-
-//         vctr = M_PI * r_init * r_init;
-
-// #else
-
-//         // Spherical problem in Cartesian coordinates
-
-//         vctr = (4.0_rt / 3.0_rt) * M_PI * r_init * r_init * r_init;
-
-// #endif
-
-//     }
-//     else if (coord_type == 1) {
-
-// #if AMREX_SPACEDIM == 1
-
-//         vctr = M_PI * r_init * r_init;
-
-// #elif AMREX_SPACEDIM == 2
-
-//         vctr = (4.0_rt / 3.0_rt) * M_PI * r_init * r_init * r_init;
-
-// #else
-
-//         amrex::Abort("Sedov problem unsupported in 3D axisymmetric geometry.");
-
-// #endif
-
-//     }
-//     else if (coord_type == 2) {
-
-//         // Must have AMREX_SPACEDIM == 1 for this coord_type.
-
-//         vctr = (4.0_rt / 3.0_rt) * M_PI * r_init * r_init * r_init;
-
-//     }
-
-//     problem::e_exp = problem::exp_energy / vctr / problem::dens_ISM;
 }
 
 #endif

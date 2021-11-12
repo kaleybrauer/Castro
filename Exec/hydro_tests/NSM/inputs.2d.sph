@@ -1,6 +1,6 @@
 # ------------------  INPUTS TO MAIN PROGRAM  -------------------
 max_step = 5000
-stop_time = 1e9
+stop_time = 1e10
 
 # PROBLEM SIZE & GEOMETRY
 geometry.is_periodic = 0    0
@@ -67,7 +67,7 @@ amr.check_int       = 200     # number of timesteps between checkpoints
 
 # PLOTFILES
 amr.plot_file       = NSM_2d_plt
-amr.plot_int        = 100
+amr.plot_int        = 50
 amr.derive_plot_vars=ALL
 
 # PROBLEM PARAMETERS
@@ -75,9 +75,9 @@ problem.M_ej = 0.01
 problem.p_ISM = 1.e-14
 problem.exp_energy = 50.0
 problem.dens_ISM = 2.e-24
-problem.nsub = 10
 problem.t_init = 7.e7
 problem.temp_ISM = 1.e2
 
 # EOS
 eos.eos_assume_neutral = 1
+eos.eos_gamma = 5./3.

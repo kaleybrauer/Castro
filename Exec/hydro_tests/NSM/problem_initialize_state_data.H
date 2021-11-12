@@ -49,10 +49,13 @@ void problem_initialize_state_data (int i, int j, int k, Array4<Real> const& sta
     Real vy = 0.0;
     Real vz = 0.0;
 
-    // to identify if the cell is ejecta or not
+    // UFS variables used to identify if the cell is ejecta or not
+    // UFS+0 = ejecta; UFS+1 = ISM
     for (int n = 0; n < NumSpec; n++) {
         state(i,j,k,UFS+n) = 0.0_rt;
     }
+    
+    state(i,j,k,UFS+1) = problem::dens_ISM; // always the same background density
 
     if (dens_ej > problem::dens_ISM)
     {
@@ -60,22 +63,13 @@ void problem_initialize_state_data (int i, int j, int k, Array4<Real> const& sta
         vx = x / problem::t_init;
         vy = y / problem::t_init;
         vz = z / problem::t_init;
-
-        state(i,j,k,UFS) = dens_zone;
-        // state(i,j,k,UFS+1) = 0.0_rt;
+        state(i,j,k,UFS) = dens_zone - problem::dens_ISM;
     }
     else {
         dens_zone = problem::dens_ISM; // only extend broken power law until it equals rho_ISM
-        // state(i,j,k,UFS) = 0.0_rt;
-        state(i,j,k,UFS+1) = dens_zone;
     }
 
-    if ((i == 21) and (j == 0)) {
-        printf("i, j, k: %d, %d, %d; r:%E\n", i,j,k,r);
-        printf("UFS0:%E, UFS1:%E\n", state(i,j,k,UFS), state(i,j,k,UFS+1));
-    }
     // printf("vx:%E\n", vx);
-    // printf("vy:%E\n", vy);
 
     if (coord_type != 0) {
         vx = sqrt(vx * vx);
@@ -89,15 +83,9 @@ void problem_initialize_state_data (int i, int j, int k, Array4<Real> const& sta
     Real eint = max(0.05 * ekin, eint_min); // setting E_int to 5% of the kinetic energy
 
     state(i,j,k,URHO) = dens_zone;
-    state(i,j,k,UFS) = state(i,j,k,URHO) - state(i,j,k,UFS+1);
     state(i,j,k,UMX) = dens_zone * vx;
     state(i,j,k,UMY) = dens_zone * vy;
     state(i,j,k,UMZ) = dens_zone * vz;
-
-    // state(i,j,k,UEDEN) = eint +
-    //                      0.5e0_rt * (state(i,j,k,UMX) * state(i,j,k,UMX) / state(i,j,k,URHO) +
-    //                                  state(i,j,k,UMY) * state(i,j,k,UMY) / state(i,j,k,URHO) +
-    //                                  state(i,j,k,UMZ) * state(i,j,k,UMZ) / state(i,j,k,URHO));
 
     state(i,j,k,UEDEN) = ekin + eint;
     state(i,j,k,UEINT) = eint;
@@ -110,8 +98,6 @@ void problem_initialize_state_data (int i, int j, int k, Array4<Real> const& sta
     // to the ISM temperature everywhere.
 
     state(i,j,k,UTEMP) = problem::temp_ISM;
-
-    state(i,j,k,UFS) = state(i,j,k,URHO);
 }
 
 #endif
